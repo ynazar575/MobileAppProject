@@ -2,10 +2,12 @@ package com.example.courseworkproject;
 
 import android.os.Bundle;
 
-public class LoginActivit extends LoginActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_screen);
+        setContentView(R.layout.signup_page);
     }
 }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "824521152170",
+    "project_id": "mobileapplogin-a400e",
+    "storage_bucket": "mobileapplogin-a400e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824521152170:android:8d8845840c0ceeb31b62d3",
+        "android_client_info": {
+          "package_name": "com.example.courseworkproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824521152170-eq93i8k6q8mf1h15ltu6hjpqgskf2o9f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.courseworkproject",
+            "certificate_hash": "bfe9aaba3b409ade6a90e0d4f9f3b23e45113f2c"
+          }
+        },
+        {
+          "client_id": "824521152170-use6usnkaseof53tto9b6imasirdpjhi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXvV7-xZty1l18iY3qq8nDvQJjelUvnMU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824521152170-use6usnkaseof53tto9b6imasirdpjhi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,11 +1,10 @@
 package com.example.courseworkproject;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-public class SplashActivity extends MainActivity {
+public class SplashActivity extends LoginActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -13,7 +12,7 @@ public class SplashActivity extends MainActivity {
 
         // Delay 2 seconds then open MainActivity
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             finish();
         }, 2000);
     }
