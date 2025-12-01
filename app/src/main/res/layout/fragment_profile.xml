@@ -1,17 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".ProfileFragment">
+    android:padding="20dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ProfileFragment"
-        android:textSize="26dp"
-        android:layout_gravity="center"/>
+        android:orientation="vertical">
 
-</FrameLayout>
+
+        <TextView
+            android:text="Your Email"
+            android:id="@+id/txtEmail"
+            android:textSize="18sp"
+            android:padding="4dp"
+            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:text="Your Name"
+            android:id="@+id/txtName"
+            android:textSize="18sp"
+            android:padding="4dp"
+            android:marginBottom="14dp"
+            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"
+            />
+
+        <EditText
+            android:id="@+id/inputName"
+            android:hint="New Name"
+            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btnUpdateName"
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:text="Update Name"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/inputEmail"
+            android:hint="New Email"
+            android:inputType="textEmailAddress"
+            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btnUpdateEmail"
+            android:text="Update Email"
+            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/inputPassword"
+            android:hint="New Password"
+            android:inputType="textPassword"
+            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btnUpdatePassword"
+            android:text="Update Password"
+            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btnSignOut"
+            android:text="Sign Out"
+            android:marginTop="30dp"
+            android:layout_height="100dp"
+            android:layout_width="200dp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</ScrollView>

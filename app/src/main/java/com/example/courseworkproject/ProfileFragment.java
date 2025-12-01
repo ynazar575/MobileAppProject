@@ -1,64 +1,122 @@
 package com.example.courseworkproject;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private TextView txtEmail;
+    private EditText inputName, inputEmail, inputPassword;
+    private Button btnUpdateName, btnUpdateEmail, btnUpdatePassword, btnSignOut;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private FirebaseFirestore db;
 
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public ProfileFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+
+        txtEmail = view.findViewById(R.id.txtEmail);
+        inputName = view.findViewById(R.id.inputName);
+        inputEmail = view.findViewById(R.id.inputEmail);
+        inputPassword = view.findViewById(R.id.inputPassword);
+
+        btnUpdateName = view.findViewById(R.id.btnUpdateName);
+        btnUpdateEmail = view.findViewById(R.id.btnUpdateEmail);
+        btnUpdatePassword = view.findViewById(R.id.btnUpdatePassword);
+        btnSignOut = view.findViewById(R.id.btnSignOut);
+
+        loadUserDetails();
+        setupListeners();
+
+        return view;
+    }
+
+    private void loadUserDetails() {
+        if (user == null) return;
+
+        txtEmail.setText(user.getEmail());
+
+        db.collection("users")
+                .document(user.getUid())
+                .get()
+                .addOnSuccessListener(doc -> {
+                    if (doc.exists()) {
+                        String name = doc.getString("name");
+                        inputName.setText(name != null ? name : "");
+                    }
+                });
+    }
+
+    private void setupListeners() {
+
+        btnUpdateName.setOnClickListener(v -> {
+            String name = inputName.getText().toString().trim();
+            if (name.isEmpty()) {
+                Toast.makeText(getContext(), "Enter a name", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            db.collection("users")
+                    .document(user.getUid())
+                    .update("name", name)
+                    .addOnSuccessListener(a -> Toast.makeText(getContext(), "Name updated", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update name", Toast.LENGTH_SHORT).show());
+        });
+
+        btnUpdateEmail.setOnClickListener(v -> {
+            String email = inputEmail.getText().toString().trim();
+            if (email.isEmpty()) {
+                Toast.makeText(getContext(), "Enter an email", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            user.updateEmail(email)
+                    .addOnSuccessListener(a -> {
+                        txtEmail.setText(email);
+                        Toast.makeText(getContext(), "Email updated", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update email", Toast.LENGTH_SHORT).show());
+        });
+
+        btnUpdatePassword.setOnClickListener(v -> {
+            String pass = inputPassword.getText().toString().trim();
+            if (pass.isEmpty()) {
+                Toast.makeText(getContext(), "Enter a password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            user.updatePassword(pass)
+                    .addOnSuccessListener(a -> Toast.makeText(getContext(), "Password updated", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update password", Toast.LENGTH_SHORT).show());
+        });
+
+        btnSignOut.setOnClickListener(v -> {
+            auth.signOut();
+            startActivity(new Intent(getContext(), LoginActivity.class));
+            getActivity().finish();
+        });
     }
 }
