@@ -44,7 +44,10 @@ public class SignUpActivity extends AppCompatActivity {
                     signupEmail.setError("email cannot be empty");
                 }
                 if(pass.isEmpty()){
-                    signupEmail.setError("password cannot be empty");
+                    signupPaswword.setError("password cannot be empty");
+                }
+                else if(pass.length() < 6){
+                    signupPaswword.setError("password must be at least 6 characters");
                 }
                 else{
                     auth.createUserWithEmailAndPassword(user,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

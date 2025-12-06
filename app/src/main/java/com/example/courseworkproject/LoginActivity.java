@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 }else if (email.isEmpty()){
-                    LoginEmail.setError("email acnnot be empty");
+                    LoginEmail.setError("email cannot be empty");
                 }else {
                     LoginEmail.setError("please enter valid email");
                 }

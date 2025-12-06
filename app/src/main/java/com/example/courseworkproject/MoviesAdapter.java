@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashSet;
 import java.util.List;
@@ -47,13 +48,27 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         favoritesRef = db.collection("users")
                 .document(auth.getCurrentUser().getUid())
                 .collection("favorites");
+
+        loadFavoriteIds();
     }
 
-
+    private void loadFavoriteIds() {
+        favoritesRef.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    favoriteIds.clear();
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                        favoriteIds.add(doc.getId()); // Document ID is the movie ID
+                    }
+                    notifyDataSetChanged(); // Refresh UI after loading favorites
+                })
+                .addOnFailureListener(e -> {
+                    // Handle error silently or show toast
+                });
+    }
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.fragment_saved, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_movie, parent, false);
         return new MovieViewHolder(view);
     }
 
@@ -71,7 +86,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         if (isFavoritesTab) {
             holder.btnFavorite.setText("Unfavorite");
             holder.btnFavorite.setEnabled(true);
-            holder.btnFavorite.setOnClickListener(v -> removeFavorite(movie));
+            holder.btnFavorite.setOnClickListener(v -> removeFavorite(movie,position));
         } else {
             if (favoriteIds.contains(movie.getId())) {
                 holder.btnFavorite.setText("Favorited");
@@ -79,24 +94,33 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             } else {
                 holder.btnFavorite.setText("Favorite");
                 holder.btnFavorite.setEnabled(true);
-                holder.btnFavorite.setOnClickListener(v -> addFavorite(movie));
+                holder.btnFavorite.setOnClickListener(v -> addFavorite(movie,holder));
             }
         }
     }
 
-    private void addFavorite(Movies.MovieItem movie) {
+    private void addFavorite(Movies.MovieItem movie, MovieViewHolder holder) {
         favoritesRef.document(movie.getId())
                 .set(movie)
-                .addOnSuccessListener(a -> Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(context, "Failed to add favorite", Toast.LENGTH_SHORT).show());
+                .addOnSuccessListener(a -> {
+                    // Add to local set and update UI
+                    favoriteIds.add(movie.getId());
+                    notifyDataSetChanged();
+                    holder.btnFavorite.setText("Favorited");
+                    holder.btnFavorite.setEnabled(false);
+                    Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(context, "Failed to add favorite", Toast.LENGTH_SHORT).show());
     }
 
-    private void removeFavorite(Movies.MovieItem movie) {
+    private void removeFavorite(Movies.MovieItem movie, int position) {
         favoritesRef.document(movie.getId())
                 .delete()
                 .addOnSuccessListener(a -> {
-                    movies.remove(movie);
-                    notifyDataSetChanged();
+                    favoriteIds.remove(movie.getId());
+                    movies.remove(position);
+                    notifyItemRemoved(position);
                     Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(context, "Failed to remove favorite", Toast.LENGTH_SHORT).show());
@@ -125,6 +149,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         favoriteIds.clear();
         favoriteIds.addAll(ids);
         notifyDataSetChanged();
+    }
+    public void refreshFavorites() {
+        loadFavoriteIds();
     }
 
 }

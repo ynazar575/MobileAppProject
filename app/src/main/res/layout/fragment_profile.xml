@@ -1,85 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:text="Profile"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:textAlignment="center"/>
+
+        <!-- Display Current Email -->
+        <TextView
+            android:text="Current Email"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <TextView
-            android:text="Your Email"
             android:id="@+id/txtEmail"
-            android:textSize="18sp"
-            android:padding="4dp"
-            android:layout_height="100dp"
-            android:layout_width="200dp"
-            android:layout_gravity="center"/>
+            android:text="Loading..."
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/custom_text_box"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Display Current Name -->
+        <TextView
+            android:text="Current Name"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <TextView
-            android:text="Your Name"
             android:id="@+id/txtName"
-            android:textSize="18sp"
-            android:padding="4dp"
-            android:marginBottom="14dp"
-            android:layout_height="100dp"
-            android:layout_width="200dp"
-            android:layout_gravity="center"
-            />
+            android:text="Loading..."
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/custom_text_box"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Update Name Section -->
+        <TextView
+            android:text="Update Name"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
 
         <EditText
             android:id="@+id/inputName"
-            android:hint="New Name"
-            android:layout_height="100dp"
-            android:layout_width="200dp"
-            android:layout_gravity="center"/>
+            android:hint="Enter new name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/custom_text_box"
+            android:layout_marginTop="4dp"/>
 
         <Button
             android:id="@+id/btnUpdateName"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="Update Name"
-            android:layout_gravity="center"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Update Email Section -->
+        <TextView
+            android:text="Update Email"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
 
         <EditText
             android:id="@+id/inputEmail"
-            android:hint="New Email"
+            android:hint="Enter new email"
             android:inputType="textEmailAddress"
-            android:layout_height="100dp"
-            android:layout_width="200dp"
-            android:layout_gravity="center"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/custom_text_box"
+            android:layout_marginTop="4dp"/>
 
         <Button
             android:id="@+id/btnUpdateEmail"
             android:text="Update Email"
-            android:layout_height="100dp"
-            android:layout_width="200dp"
-            android:layout_gravity="center"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Update Password Section -->
+        <TextView
+            android:text="Update Password"
+            android:textSize="14sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
 
         <EditText
             android:id="@+id/inputPassword"
-            android:hint="New Password"
+            android:hint="Enter new password (min 6 chars)"
             android:inputType="textPassword"
-            android:layout_height="100dp"
-            android:layout_width="200dp"
-            android:layout_gravity="center"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/custom_text_box"
+            android:layout_marginTop="4dp"/>
 
         <Button
             android:id="@+id/btnUpdatePassword"
             android:text="Update Password"
-            android:layout_height="100dp"
-            android:layout_width="200dp"
-            android:layout_gravity="center"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"/>
 
+        <!-- Sign Out Button -->
         <Button
             android:id="@+id/btnSignOut"
             android:text="Sign Out"
-            android:marginTop="30dp"
-            android:layout_height="100dp"
-            android:layout_width="200dp"
-            android:layout_gravity="center"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#D32F2F"
+            android:layout_marginTop="16dp"/>
     </LinearLayout>
 </ScrollView>

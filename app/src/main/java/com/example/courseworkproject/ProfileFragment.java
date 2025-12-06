@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView txtEmail;
+    private TextView txtEmail, txtName;
     private EditText inputName, inputEmail, inputPassword;
     private Button btnUpdateName, btnUpdateEmail, btnUpdatePassword, btnSignOut;
 
@@ -39,6 +39,7 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         txtEmail = view.findViewById(R.id.txtEmail);
+        txtName = view.findViewById(R.id.txtName);
         inputName = view.findViewById(R.id.inputName);
         inputEmail = view.findViewById(R.id.inputEmail);
         inputPassword = view.findViewById(R.id.inputPassword);
@@ -65,8 +66,17 @@ public class ProfileFragment extends Fragment {
                 .addOnSuccessListener(doc -> {
                     if (doc.exists()) {
                         String name = doc.getString("name");
-                        inputName.setText(name != null ? name : "");
+                        if (name != null && !name.isEmpty()) {
+                            txtName.setText(name);  // Show the name
+                        } else {
+                            txtName.setText("No name set");  // Default if no name
+                        }
+                    } else {
+                        txtName.setText("No name set");
                     }
+                })
+                .addOnFailureListener(e -> {
+                    txtName.setText("Error loading name");
                 });
     }
 
@@ -105,6 +115,10 @@ public class ProfileFragment extends Fragment {
             String pass = inputPassword.getText().toString().trim();
             if (pass.isEmpty()) {
                 Toast.makeText(getContext(), "Enter a password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (pass.length() < 6) {
+                Toast.makeText(getContext(), "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
                 return;
             }
 

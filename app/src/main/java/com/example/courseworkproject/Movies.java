@@ -17,7 +17,7 @@ public class Movies {
     // Individual movie item
     public class MovieItem implements Serializable {
         @SerializedName("id")
-        private String id;
+        private int id;
         @SerializedName("title")
         private String title;
         @SerializedName("overview")
@@ -27,7 +27,7 @@ public class Movies {
         @SerializedName("release_date")
         private String releaseDate;
 
-        public String getId() { return id; }
+        public String getId() { return String.valueOf(id); }
         public String getTitle() { return title; }
         public String getOverview() { return overview; }
         public String getPosterPath() { return posterPath; }
