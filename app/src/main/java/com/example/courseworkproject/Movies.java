@@ -8,14 +8,14 @@ import java.util.List;
 public class Movies {
 
     // Response from TMDb
-    public class MovieResponse {
+    public static class MovieResponse {
         @SerializedName("results")
         private List<MovieItem> results;
         public List<MovieItem> getResults() { return results; }
     }
 
     // Individual movie item
-    public class MovieItem implements Serializable {
+    public static class MovieItem implements Serializable {
         @SerializedName("id")
         private int id;
         @SerializedName("title")

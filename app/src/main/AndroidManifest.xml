@@ -31,8 +31,8 @@
         </activity>
         <activity
             android:name=".MovieDetailsActivity"
-            android:exported="false">
-
+            android:exported="false"
+            android:parentActivityName=".HomeActivity">
         </activity>
         <activity
             android:name=".HomeActivity"
