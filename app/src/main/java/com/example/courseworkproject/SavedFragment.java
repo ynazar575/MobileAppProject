@@ -36,11 +36,14 @@ public class SavedFragment extends Fragment {
         });
         recyclerView.setAdapter(adapter);
 
-        loadFavorites();
+
 
         return view;
     }
-
+    public void onResume(){
+        super.onResume();
+        loadFavorites();
+    }
     private void loadFavorites() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();

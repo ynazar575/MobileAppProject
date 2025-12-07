@@ -16,6 +16,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth auth;
@@ -54,8 +58,19 @@ public class SignUpActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(SignUpActivity.this,"SignUp Succesfil",Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignUpActivity.this,LoginActivity.class));
+                                // Create a new user map
+                                Map<String, Object> userMap = new HashMap<>();
+                                userMap.put("email", user);
+                                userMap.put("name", ""); // Default empty name
+
+                                // Save to Firestore
+                                String userId = auth.getCurrentUser().getUid();
+                                FirebaseFirestore.getInstance().collection("users").document(userId)
+                                        .set(userMap)
+                                        .addOnSuccessListener(v -> {
+                                            Toast.makeText(SignUpActivity.this,"SignUp Successful",Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                                        });
 
                             }
                             else{

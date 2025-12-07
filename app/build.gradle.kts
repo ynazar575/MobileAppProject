@@ -13,7 +13,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        val tmdbApiKey = providers.gradleProperty("tmdb_api_key")
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -25,6 +26,7 @@ android {
     }
     buildFeatures{
         viewBinding = true;
+        buildConfig = true;
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

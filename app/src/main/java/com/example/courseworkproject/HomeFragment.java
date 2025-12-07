@@ -1,5 +1,5 @@
 package com.example.courseworkproject;
-
+import com.example.courseworkproject.BuildConfig;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -39,8 +39,6 @@ public class HomeFragment extends Fragment {
     private List<Movies.MovieItem> movieList;
     private MoviesAdapter adapter;
 
-    private final String API_KEY = "a77389d1314248075285dab872523606";
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -76,7 +74,8 @@ public class HomeFragment extends Fragment {
     private void searchMovies(String query) {
         progressBar.setVisibility(View.VISIBLE);
         TMDbApi api = retrofit.getInstance().create(TMDbApi.class);
-        api.searchMovies(API_KEY, query).enqueue(new Callback<Movies.MovieResponse>() {
+        String apiKey = BuildConfig.TMDB_API_KEY;
+        api.searchMovies(apiKey, query).enqueue(new Callback<Movies.MovieResponse>() {
             @Override
             public void onResponse(Call<Movies.MovieResponse> call, Response<Movies.MovieResponse> response) {
                 progressBar.setVisibility(View.GONE);
