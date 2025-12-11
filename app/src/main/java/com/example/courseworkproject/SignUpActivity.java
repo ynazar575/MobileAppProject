@@ -2,6 +2,7 @@ package com.example.courseworkproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,14 +46,23 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if(user.isEmpty()){
                     signupEmail.setError("email cannot be empty");
+                    return;
+                }
+                if(!Patterns.EMAIL_ADDRESS.matcher(user).matches()){
+                    signupEmail.setError("please enter valid email");
+                    return;
                 }
                 if(pass.isEmpty()){
                     signupPaswword.setError("password cannot be empty");
+                    return;
                 }
-                else if(pass.length() < 6){
+                if(pass.length() < 6){
                     signupPaswword.setError("password must be at least 6 characters");
+                    return;
                 }
-                else{
+                
+                // All validations passed
+                {
                     auth.createUserWithEmailAndPassword(user,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -70,6 +79,12 @@ public class SignUpActivity extends AppCompatActivity {
                                         .addOnSuccessListener(v -> {
                                             Toast.makeText(SignUpActivity.this,"SignUp Successful",Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                                            finish();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(SignUpActivity.this, "Account created but failed to save profile. Please try logging in.", Toast.LENGTH_LONG).show();
+                                            startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                                            finish();
                                         });
 
                             }

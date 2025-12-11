@@ -1,16 +1,5 @@
 package com.example.courseworkproject;
-import com.example.courseworkproject.BuildConfig;
-import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,14 +41,16 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         progressBar = view.findViewById(R.id.progressBar);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         movieList = new ArrayList<>();
 
-        adapter = new MoviesAdapter(getContext(), movieList,false, movie -> {
+        adapter = new MoviesAdapter(requireContext(), movieList,false, movie -> {
             // Click to open movie details
-            Intent i = new Intent(getContext(), MovieDetailsActivity.class);
-            i.putExtra("movie", movie);
-            startActivity(i);
+            if (getContext() != null) {
+                Intent i = new Intent(getContext(), MovieDetailsActivity.class);
+                i.putExtra("movie", movie);
+                startActivity(i);
+            }
         });
         recyclerView.setAdapter(adapter);
 
@@ -64,7 +59,9 @@ public class HomeFragment extends Fragment {
             if (!TextUtils.isEmpty(query)) {
                 searchMovies(query);
             } else {
-                Toast.makeText(getContext(), "Enter a movie name", Toast.LENGTH_SHORT).show();
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Enter a movie name", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -83,15 +80,22 @@ public class HomeFragment extends Fragment {
                     movieList.clear();
                     movieList.addAll(response.body().getResults());
                     adapter.notifyDataSetChanged();
-                } else {
+            } else {
+                if (getContext() != null) {
                     Toast.makeText(getContext(), "No movies found", Toast.LENGTH_SHORT).show();
                 }
+            }
             }
 
             @Override
             public void onFailure(Call<Movies.MovieResponse> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(getContext(), "Failed to fetch movies", Toast.LENGTH_SHORT).show();
+                if (getContext() != null) {
+                    String errorMsg = t.getMessage() != null && t.getMessage().contains("Unable to resolve host") 
+                        ? "No internet connection" 
+                        : "Failed to fetch movies";
+                    Toast.makeText(getContext(), errorMsg, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

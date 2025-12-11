@@ -34,7 +34,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private OnMovieClickListener clickListener;
 
     private FirebaseAuth auth;
-    private CollectionReference favoritesRef;
+    private CollectionReference favoritesRef; // Can be null if user is not logged in
 
     public MoviesAdapter(Context context, List<Movies.MovieItem> movies,
                          boolean isFavoritesTab, OnMovieClickListener clickListener) {
@@ -45,14 +45,17 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        favoritesRef = db.collection("users")
-                .document(auth.getCurrentUser().getUid())
-                .collection("favorites");
+        if (auth.getCurrentUser() != null) {
+            favoritesRef = db.collection("users")
+                    .document(auth.getCurrentUser().getUid())
+                    .collection("favorites");
+        }
 
         loadFavoriteIds();
     }
 
     private void loadFavoriteIds() {
+        if (favoritesRef == null || auth.getCurrentUser() == null) return;
         favoritesRef.get()
                 .addOnSuccessListener(querySnapshot -> {
                     favoriteIds.clear();
@@ -100,6 +103,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     private void addFavorite(Movies.MovieItem movie, MovieViewHolder holder) {
+        if (favoritesRef == null || auth.getCurrentUser() == null) return;
         favoritesRef.document(movie.getId())
                 .set(movie)
                 .addOnSuccessListener(a -> {
@@ -115,6 +119,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     private void removeFavorite(Movies.MovieItem movie, int position) {
+        if (favoritesRef == null || auth.getCurrentUser() == null) return;
         favoritesRef.document(movie.getId())
                 .delete()
                 .addOnSuccessListener(a -> {

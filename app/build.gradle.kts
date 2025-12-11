@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
@@ -13,8 +16,22 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        val tmdbApiKey = providers.gradleProperty("tmdb_api_key")
+
+        // Read TMDB API key from local.properties or gradle.properties
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(FileInputStream(localPropertiesFile))
+        }
+        val tmdbApiKey = (localProperties.getProperty("tmdb_api_key") 
+            ?: project.findProperty("tmdb_api_key") as String?)
+            ?.trim()
+            ?.removeSurrounding("\"", "\"") // Remove quotes if present
+            ?: ""
+        
+
         buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

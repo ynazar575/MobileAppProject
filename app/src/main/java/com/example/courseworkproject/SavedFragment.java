@@ -26,13 +26,15 @@ public class SavedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_saved, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         favoriteMovies = new ArrayList<>();
-        adapter = new MoviesAdapter(getContext(), favoriteMovies, true, movie -> {
-            Intent i = new Intent(getContext(), MovieDetailsActivity.class);
-            i.putExtra("movie", movie);
-            startActivity(i);
+        adapter = new MoviesAdapter(requireContext(), favoriteMovies, true, movie -> {
+            if (getContext() != null) {
+                Intent i = new Intent(getContext(), MovieDetailsActivity.class);
+                i.putExtra("movie", movie);
+                startActivity(i);
+            }
         });
         recyclerView.setAdapter(adapter);
 
@@ -46,6 +48,7 @@ public class SavedFragment extends Fragment {
     }
     private void loadFavorites() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) return;
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         db.collection("users").document(uid).collection("favorites")
                 .get()

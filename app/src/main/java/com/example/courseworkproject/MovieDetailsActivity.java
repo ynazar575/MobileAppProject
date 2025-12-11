@@ -39,9 +39,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        favoritesRef = db.collection("users")
-                .document(auth.getCurrentUser().getUid())
-                .collection("favorites");
+        if (auth.getCurrentUser() != null) {
+            favoritesRef = db.collection("users")
+                    .document(auth.getCurrentUser().getUid())
+                    .collection("favorites");
+        }
 
         // Get the movie object from intent
         movie = (Movies.MovieItem) getIntent().getSerializableExtra("movie");
@@ -64,6 +66,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void checkIfFavorited() {
+        if (favoritesRef == null || auth.getCurrentUser() == null) return;
         favoritesRef.document(movie.getId())
                 .get()
                 .addOnSuccessListener(doc -> {
@@ -77,6 +80,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void toggleFavorite() {
+        if (favoritesRef == null || auth.getCurrentUser() == null) return;
         if (isFavorited) {
             favoritesRef.document(movie.getId())
                     .delete()

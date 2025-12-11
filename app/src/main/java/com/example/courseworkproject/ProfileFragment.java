@@ -83,6 +83,7 @@ public class ProfileFragment extends Fragment {
     private void setupListeners() {
 
         btnUpdateName.setOnClickListener(v -> {
+            if (getContext() == null || user == null) return;
             String name = inputName.getText().toString().trim();
             if (name.isEmpty()) {
                 Toast.makeText(getContext(), "Enter a name", Toast.LENGTH_SHORT).show();
@@ -92,11 +93,16 @@ public class ProfileFragment extends Fragment {
             db.collection("users")
                     .document(user.getUid())
                     .update("name", name)
-                    .addOnSuccessListener(a -> Toast.makeText(getContext(), "Name updated", Toast.LENGTH_SHORT).show())
+                    .addOnSuccessListener(a -> {
+                        txtName.setText(name);
+                        inputName.setText("");
+                        Toast.makeText(getContext(), "Name updated", Toast.LENGTH_SHORT).show();
+                    })
                     .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update name", Toast.LENGTH_SHORT).show());
         });
 
         btnUpdateEmail.setOnClickListener(v -> {
+            if (getContext() == null || user == null) return;
             String email = inputEmail.getText().toString().trim();
             if (email.isEmpty()) {
                 Toast.makeText(getContext(), "Enter an email", Toast.LENGTH_SHORT).show();
@@ -106,12 +112,14 @@ public class ProfileFragment extends Fragment {
             user.updateEmail(email)
                     .addOnSuccessListener(a -> {
                         txtEmail.setText(email);
+                        inputEmail.setText("");
                         Toast.makeText(getContext(), "Email updated", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update email", Toast.LENGTH_SHORT).show());
         });
 
         btnUpdatePassword.setOnClickListener(v -> {
+            if (getContext() == null || user == null) return;
             String pass = inputPassword.getText().toString().trim();
             if (pass.isEmpty()) {
                 Toast.makeText(getContext(), "Enter a password", Toast.LENGTH_SHORT).show();
@@ -123,11 +131,15 @@ public class ProfileFragment extends Fragment {
             }
 
             user.updatePassword(pass)
-                    .addOnSuccessListener(a -> Toast.makeText(getContext(), "Password updated", Toast.LENGTH_SHORT).show())
+                    .addOnSuccessListener(a -> {
+                        inputPassword.setText("");
+                        Toast.makeText(getContext(), "Password updated", Toast.LENGTH_SHORT).show();
+                    })
                     .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to update password", Toast.LENGTH_SHORT).show());
         });
 
         btnSignOut.setOnClickListener(v -> {
+            if (getContext() == null || getActivity() == null) return;
             auth.signOut();
             startActivity(new Intent(getContext(), LoginActivity.class));
             getActivity().finish();
